@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CakweTop — Medan's Best Cakwe</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Nunito:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --orange: #D85A30;
+      --orange-light: #FAECE7;
+      --orange-dark: #993C1D;
+      --amber: #f39428;
+      --yellow: #fffb93;
+      --green: #0ec50e;
+      --text: #1a1a1a;
+      --muted: #666;
+      --border: #e5e5e5;
+      --bg-light: #f9f9f9;
+      --nav-h: 64px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background:var(--amber);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    /* ========== NAV ========== */
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 clamp(1rem, 4vw, 2rem);
+      height: var(--nav-h);
+      border-bottom: 1px solid #e5f5e5;
+      box-shadow: 0 1px 8px rgba(0,0,0,0.04);
+    }
+
+    .logo {
+      font-family: 'Playfair Display', 'serif';
+      font-size: clamp(22px, 5vw, 30px);
+      color: var(--text);
+      white-space: nowrap;
+    }
+    .logo span { color: var(--text); }
+
+    /* Desktop nav links */
+    .nav-links {
+      display: flex;
+      gap: clamp(12px, 2vw, 24px);
+      align-items: center;
+    }
+    .nav-links a {
+      font-size: clamp(13px, 1.5vw, 16px);
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 600;
+      transition: color .2s;
+    }
+    .nav-links a:hover { color: var(--orange); }
+
+    .nav-btn {
+      background: var(--orange);
+      color: #fff;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: clamp(12px, 1.5vw, 15px);
+      cursor: pointer;
+      font-weight: 700;
+      text-decoration: none;
+      display: inline-block;
+      white-space: nowrap;
+      transition: background .2s, transform .15s;
+    }
+    .nav-btn:hover { background: var(--orange-dark); transform: translateY(-1px); }
+
+    /* Hamburger */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      gap: 5px;
+      width: 36px;
+      height: 36px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+      border-radius: 6px;
+    }
+    .hamburger span {
+      display: block;
+      width: 22px;
+      height: 2.5px;
+      background: var(--text);
+      border-radius: 2px;
+      transition: all .3s;
+    }
+    .hamburger.open span:nth-child(1) { transform: translateY(7.5px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7.5px) rotate(-45deg); }
+
+    /* Mobile drawer */
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      top: var(--nav-h);
+      left: 0; right: 0;
+      background: #fff;
+      border-bottom: 1px solid var(--border);
+      padding: 1rem 1.5rem;
+      z-index: 99;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+      flex-direction: column;
+      gap: 12px;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text);
+      text-decoration: none;
+      padding: 10px 0;
+      border-bottom: 1px solid #f0f0f0;
+      transition: color .2s;
+    }
+    .mobile-menu a:last-child { border-bottom: none; }
+    .mobile-menu a:hover { color: var(--orange); }
+    .mobile-menu .nav-btn { text-align: center; padding: 12px; border-radius: 10px; }
+
+    /* ========== HERO ========== */
+    .hero {
+      padding: clamp(2rem, 6vw, 4rem) clamp(1rem, 5vw, 2rem) clamp(2rem, 5vw, 3rem);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .hero-text { max-width: 540px; flex: 1 1 280px; }
+
+    .badge {
+      display: inline-block;
+      background: var(--orange-light);
+      color: var(--orange-dark);
+      font-size: clamp(11px, 2vw, 13px);
+      padding: 5px 14px;
+      border-radius: 20px;
+      margin-bottom: 1rem;
+      font-weight: 700;
+    }
+
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(28px, 5vw, 42px);
+      line-height: 1.2;
+      margin-bottom: 1rem;
+    }
+    .hero h1 em { color: var(--orange); font-style: normal; }
+
+    .hero p {
+      font-size: clamp(13px, 2vw, 15px);
+      color: #000000;
+      line-height: 1.7;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-btns {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      background: var(--orange-dark);
+      color: #fff;
+      border: none;
+      padding: 11px 20px;
+      border-radius: 8px;
+      font-size: clamp(12px, 2vw, 14px);
+      cursor: pointer;
+      font-weight: 700;
+      text-decoration: none;
+      display: inline-block;
+      transition: background .2s, transform .15s;
+    }
+    .btn-primary:hover { background: #d4820e; transform: translateY(-2px); }
+
+    .ig-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+      color: #fff;
+      border: none;
+      padding: 11px 18px;
+      border-radius: 8px;
+      font-size: clamp(12px, 2vw, 13px);
+      cursor: pointer;
+      font-weight: 700;
+      text-decoration: none;
+      transition: opacity .2s, transform .15s;
+    }
+    .ig-btn:hover { opacity: .88; transform: translateY(-2px); }
+
+    .wa-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--green);
+      color: #fff;
+      border: none;
+      padding: 11px 18px;
+      border-radius: 8px;
+      font-size: clamp(12px, 2vw, 13px);
+      cursor: pointer;
+      font-weight: 700;
+      text-decoration: none;
+      transition: background .2s, transform .15s;
+    }
+    .wa-btn:hover { background: #0aad0a; transform: translateY(-2px); }
+
+    /* HERO VISUAL */
+    .hero-visual {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      flex: 0 0 auto;
+    }
+
+    .cakwe-img-box {
+      width: clamp(160px, 28vw, 240px);
+      height: clamp(160px, 28vw, 240px);
+      background:#0ec50e00;
+      border-radius: 25px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      box-shadow: 0 8px 30px rgba(216, 90, 48, 0);
+    }
+
+    .cakwe-img-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 16px;
+      display: block;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%   { transform: translateY(0px); }
+      50%  { transform: translateY(-12px); }
+      100% { transform: translateY(0px); }
+    }
+
+    .stats-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .stat-mini {
+      background: var(--yellow);
+      border: 1px solid #ffe100;
+      border-radius: 10px;
+      padding: 8px 14px;
+      text-align: center;
+      min-width: 72px;
+    }
+    .stat-mini .n { font-size: clamp(16px, 3vw, 20px); font-weight: 700; color: #ff6200; }
+    .stat-mini .l { font-size: clamp(10px, 2vw, 13px); color: #ff6200; }
+
+    /* ========== SECTION ========== */
+    .section {
+      padding: clamp(2rem, 5vw, 4rem) clamp(1rem, 5vw, 2rem) clamp(2rem, 4vw, 3rem);
+    }
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(20px, 4vw, 26px);
+      font-weight: 700;
+      margin-bottom: 0.4rem;
+    }
+    .section-sub { font-size: clamp(12px, 2vw, 14px); color: var(--muted); margin-bottom: 1.5rem; }
+
+    /* ========== MENU GRID ========== */
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(min(180px, 100%), 1fr));
+      gap: 16px;
+    }
+
+    .menu-card {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+      transition: border-color .15s, box-shadow .2s, transform .2s;
+    }
+    .menu-card:hover {
+      border-color: var(--orange);
+      box-shadow: 0 6px 20px rgba(216,90,48,0.12);
+      transform: translateY(-3px);
+    }
+
+    .menu-photo {
+      width: 100%;
+      height: clamp(130px, 20vw, 180px);
+      background: var(--orange-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 40px;
+      overflow: hidden;
+    }
+    .menu-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .menu-photo .placeholder-emoji { font-size: 40px; }
+
+    .menu-body { padding: 0.75rem 1rem 1rem; }
+    .menu-name { font-size: clamp(12px, 2vw, 14px); font-weight: 700; margin-bottom: 4px; }
+    .menu-desc { font-size: clamp(11px, 1.8vw, 12px); color: #777; margin-bottom: 8px; line-height: 1.45; }
+    .menu-price { font-size: clamp(12px, 2vw, 13px); font-weight: 700; color: var(--amber); }
+
+    /* ========== WHY US ========== */
+    .why-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(min(180px, 100%), 1fr));
+      gap: 12px;
+    }
+    .why-card {
+      background: var(--bg-light);
+      border-radius: 14px;
+      padding: 1.1rem 1.25rem;
+      transition: transform .2s, box-shadow .2s;
+    }
+    .why-card:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(0,0,0,0.07); }
+    .why-icon {
+      width: 38px; height: 38px;
+      background: var(--orange-light);
+      border-radius: 9px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
+    .why-title { font-size: clamp(13px, 2vw, 14px); font-weight: 700; margin-bottom: 4px; }
+    .why-text  { font-size: clamp(11px, 1.8vw, 13px); color: var(--muted); line-height: 1.5; }
+
+    /* ========== GALLERY ========== */
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(min(180px, 100%), 1fr));
+      gap: 12px;
+    }
+
+    .gallery-item {
+      width: 100%;
+      aspect-ratio: 4/3;
+      background: #f9c84d;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 2px solid #f9c84d;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      transition: transform .2s, box-shadow .2s;
+    }
+    .gallery-item:hover { transform: scale(1.02); box-shadow: 0 8px 24px rgba(0,0,0,0.1); }
+    .gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* ========== LOCATION ========== */
+    .location-card {
+      background: var(--bg-light);
+      border-radius: 14px;
+      padding: clamp(1rem, 3vw, 1.5rem);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      align-items: flex-start;
+    }
+    .loc-info { flex: 1 1 220px; }
+    .loc-info p {
+      font-size: clamp(12px, 2vw, 14px);
+      color: #555;
+      margin-bottom: 10px;
+      line-height: 1.6;
+    }
+    .loc-info strong { color: var(--text); }
+
+    /* ========== FOOTER ========== */
+    .footer {
+      padding: 1.5rem clamp(1rem, 4vw, 2rem);
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+      background: #fafafa;
+    }
+    .footer-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(15px, 3vw, 18px);
+      color: var(--text);
+      font-weight: 700;
+    }
+    .footer p { font-size: clamp(11px, 2vw, 13px); color: #000000; }
+
+    .bg-light { background: var(--bg-light); }
+
+    /* ========== RESPONSIVE BREAKPOINTS ========== */
+
+    /* Tablet & down */
+    @media (max-width: 768px) {
+      .nav-links, .nav-btn { display: none; }
+      .hamburger { display: flex; }
+
+      .hero {
+        flex-direction: column-reverse;
+        align-items: center;
+        text-align: center;
+        padding: 2rem 1rem;
+      }
+      .hero-text { max-width: 100%; }
+      .hero-btns { justify-content: center; }
+
+      .hero-visual { width: 100%; }
+
+      .stats-row { justify-content: center; }
+
+      .menu-grid { grid-template-columns: repeat(2, 1fr); }
+      .why-grid  { grid-template-columns: repeat(2, 1fr); }
+      .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+
+      .footer { justify-content: center; text-align: center; flex-direction: column; gap: 6px; }
+    }
+
+    /* Small phones */
+    @media (max-width: 420px) {
+      .menu-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+      .why-grid  { grid-template-columns: 1fr 1fr; gap: 10px; }
+      .gallery-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+
+      .hero-btns { flex-direction: column; align-items: stretch; }
+      .hero-btns a { text-align: center; }
+
+      .stat-mini { padding: 6px 10px; }
+    }
+
+    /* Very small phones */
+    @media (max-width: 340px) {
+      .menu-grid   { grid-template-columns: 1fr; }
+      .gallery-grid{ grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <div class="logo">CakweTop</div>
+
+    <div class="nav-links">
+      <a href="#menu">Menu</a>
+      <a href="#why">About</a>
+      <a href="#gallery">Galeri</a>
+      <a href="#location">Location</a>
+    </div>
+
+    <a href="https://wa.me/6281260867200" target="_blank" class="nav-btn">Order Now!</a>
+
+    <button class="hamburger" id="hamburger" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- MOBILE DRAWER -->
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#menu"     onclick="closeMenu()">🍳 Menu</a>
+    <a href="#why"      onclick="closeMenu()">✨ About</a>
+    <a href="#gallery"  onclick="closeMenu()">📸 Galeri</a>
+    <a href="#location" onclick="closeMenu()">📍 Location</a>
+    <a href="https://wa.me/6281260867200" target="_blank" class="nav-btn" onclick="closeMenu()">Order Now!</a>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-text">
+      <div class="badge">🍳 Medan's #1 Cakwe Destination</div>
+      <h1>Crispy, Delicious Cakwe — Made Fresh Daily</h1>
+      <p>Experience the authentic taste of perfectly fried cakwe and a variety of traditional Indonesian snacks. Affordable prices, amazing flavors — all made with love in Medan.</p>
+      <div class="hero-btns">
+        <a href="#menu" class="btn-primary">🍽 See Our Menu</a>
+        <a href="https://instagram.com/cakwetop" target="_blank" class="ig-btn">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="white"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+          Instagram
+        </a>
+        <a href="https://wa.me/6281260867200" target="_blank" class="wa-btn">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.890-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          WhatsApp
+        </a>
+      </div>
+    </div>
+
+    <div class="hero-visual">
+      <div class="cakwe-img-box">
+        <img src="CAKWE TOP (ORIGINAL).PNG" alt="Logo CakweTop"
+             onerror="this.style.display='none'; this.nextElementSibling.style.display='block'">
+        <span style="display:none; font-size:64px;">🍞</span>
+      </div>
+      <div class="stats-row">
+        <div class="stat-mini"><div class="n">100+</div><div class="l">Customers</div></div>
+        <div class="stat-mini"><div class="n">10+</div><div class="l">Menu Items</div></div>
+        <div class="stat-mini"><div class="n">#1</div><div class="l">In Medan</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MENU -->
+  <section class="section bg-light" id="menu">
+    <div class="section-title">Our Menu</div>
+    <div class="section-sub">Fresh, crispy, and made to order every day</div>
+    <div class="menu-grid">
+
+      <div class="menu-card">
+        <div class="menu-photo">
+          <img src="CAKWETOP.jpg" alt="CAKWE TOP"
+               onerror="this.style.display='none'; this.nextElementSibling.style.display='block'">
+          <span class="placeholder-emoji" style="display:none;">🥖</span>
+        </div>
+        <div class="menu-body">
+          <div class="menu-name">CAKWE TOP</div>
+          <div class="menu-desc">Cakwe top dengan tekstur renyah di luar dan empuk di dalam. Disajikan hangat dan segar setiap hari. Dijamin Fresh from oven!</div>
+          <div class="menu-price">Rp 6.000/pcs</div>
+        </div>
+      </div>
+
+      <div class="menu-card">
+        <div class="menu-photo">
+          <img src="KUE BOHONG (HANCIMPIANG).PNG" alt="KUE BOHONG (HANCIMPIANG)"
+               onerror="this.style.display='none'; this.nextElementSibling.style.display='block'">
+          <span class="placeholder-emoji" style="display:none;">🧀</span>
+        </div>
+        <div class="menu-body">
+          <div class="menu-name">KUE BOHONG (HANCIMPIANG)</div>
+          <div class="menu-desc">Kue bohong ini memiliki lapisan tipis cinamon yang membuat aroma kue bohong menjadi sangat wangi. Kesukaan semua pelanggan setia.</div>
+          <div class="menu-price">Rp 6.000/pcs</div>
+        </div>
+      </div>
+
+      <div class="menu-card">
+        <div class="menu-photo">
+          <img src="KUE PITA (BEHUACI).PNG" alt="Kue Pita (Behuaci)"
+               onerror="this.style.display='none'; this.nextElementSibling.style.display='block'">
+          <span class="placeholder-emoji" style="display:none;">🎀</span>
+        </div>
+        <div class="menu-body">
+          <div class="menu-name">KUE PITA (BEHUACI)</div>
+          <div class="menu-desc">Kue Pita ini memiliki bentuk yang unik berbentuk silang seperti pita. Ditaburkan wijen untuk menambah cita rasa dan aroma khas.</div>
+          <div class="menu-price">Rp 6.000</div>
+        </div>
+      </div>
+
+      <div class="menu-card">
+        <div class="menu-photo">
+          <img src="CINTOI (ONDE).PNG" alt="ONDE ONDE (CINTOI)"
+               onerror="this.style.display='none'; this.nextElementSibling.style.display='block'">
+          <span class="placeholder-emoji" style="display:none;">🟡</span>
+        </div>
+        <div class="menu-body">
+          <div class="menu-name">ONDE ONDE (CINTOI)</div>
+          <div class="menu-desc">Kue Onde bulat besar dengan pilihan rasa "kacang tanah" dan "kacang merah" yang membuat citarasa semakin lezat untuk dinikmati bersama keluarga.</div>
+          <div class="menu-price">Rp 9.000</div>
+        </div>
+      </div>
+
+      <div class="menu-card">
+        <div class="menu-photo">
+          <img src="KUE LOBAK (CHAI THAO KOI).PNG" alt="Kue Lobak"
+               onerror="this.style.display='none'; this.nextElementSibling.style.display='block'">
+          <span class="placeholder-emoji" style="display:none;">🥕</span>
+        </div>
+        <div class="menu-body">
+          <div class="menu-name">KUE LOBAK (CHAI THAO KOI)</div>
+          <div class="menu-desc">Terbuat dari lobak putih yang dikonsumsi dengan saus cabe khas kami — gurih dan lezat sekali.</div>
+          <div class="menu-price">Rp 6.000</div>
+        </div>
+      </div>
+
+      <div class="menu-card">
+        <div class="menu-photo">
+          <img src="KUE PULUT (PULUT KOI).PNG" alt="KUE PULUT"
+               onerror="this.style.display='none'; this.nextElementSibling.style.display='block'">
+          <span class="placeholder-emoji" style="display:none;">🍡</span>
+        </div>
+        <div class="menu-body">
+          <div class="menu-name">KUE PULUT</div>
+          <div class="menu-desc">Terbuat dari pulut dengan rasa asin gurih dibalut lapisan kue untuk menambah cita rasa manis dan gurih yang sempurna.</div>
+          <div class="menu-price">Rp 6.000</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- WHY US -->
+  <section class="section" id="why">
+    <div class="section-title">Why Choose Us?</div>
+    <div class="section-sub">We put quality and flavor first — every single time</div>
+    <div class="why-grid">
+      <div class="why-card">
+        <div class="why-icon">✨</div>
+        <div class="why-title">Always fresh</div>
+        <div class="why-text">Fried to order — never pre-made or reheated</div>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">💰</div>
+        <div class="why-title">Very affordable</div>
+        <div class="why-text">Great taste doesn't have to cost a lot</div>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">🍽</div>
+        <div class="why-title">Wide variety</div>
+        <div class="why-text">Cakwe in many flavors + other traditional kue</div>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">❤️</div>
+        <div class="why-title">Made with love</div>
+        <div class="why-text">Family recipes passed down with care</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GALERI FOTO -->
+  <section class="section bg-light" id="gallery">
+    <div class="section-title">Review customer setia kami ❤️</div>
+    <div class="section-sub">Bukti nyata kelezatan dan kehygenisan kami sangat baik. Buruan cobain!</div>
+    <div class="gallery-grid">
+      <div class="gallery-item">
+        <img src="1.jpeg" alt="Galeri CakweTop 1"
+             onerror="this.style.display='none'; this.parentElement.innerHTML='🍳'">
+      </div>
+      <div class="gallery-item">
+        <img src="2.jpeg" alt="Galeri CakweTop 2"
+             onerror="this.style.display='none'; this.parentElement.innerHTML='🛖'">
+      </div>
+      <div class="gallery-item">
+        <img src="3.jpeg" alt="Galeri CakweTop 3"
+             onerror="this.style.display='none'; this.parentElement.innerHTML='🤤'">
+      </div>
+      <div class="gallery-item">
+        <img src="4.jpeg" alt="Galeri CakweTop 4"
+             onerror="this.style.display='none'; this.parentElement.innerHTML='😍'">
+      </div>
+    </div>
+  </section>
+
+  <!-- LOCATION -->
+  <section class="section" id="location">
+    <div class="section-title">Find Us</div>
+    <div class="section-sub">Come visit us in Medan or follow us online</div>
+    <div class="location-card">
+      <div class="loc-info">
+        <p>📍 <strong>Location:</strong> Lantai 2 PASAR SAMBAS Medan, Sumatera Utara, Indonesia</p>
+        <p>📸 <strong>Instagram:</strong> @cakwetop</p>
+        <p>🕐 <strong>Open:</strong> Every day — 07.30 a.m – 11.30 a.m</p>
+        <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:12px;">
+          <a href="https://instagram.com/cakwetop" target="_blank" class="ig-btn">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="white"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+            @cakwetop
+          </a>
+          <a href="https://wa.me/6281260867200" target="_blank" class="wa-btn">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.890-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            WhatsApp Order
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-logo">CakweTop</div>
+    <p>© 2025 CakweTop — Medan's First Cakwe Website</p>
+    <p>Follow us: @cakwetop</p>
+  </footer>
+
+  <script>
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobileMenu');
+
+    hamburger.addEventListener('click', () => {
+      hamburger.classList.toggle('open');
+      mobileMenu.classList.toggle('open');
+    });
+
+    function closeMenu() {
+      hamburger.classList.remove('open');
+      mobileMenu.classList.remove('open');
+    }
+
+    // Close menu when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!hamburger.contains(e.target) && !mobileMenu.contains(e.target)) {
+        closeMenu();
+      }
+    });
+  </script>
+
+</body>
+</html>
